@@ -23,7 +23,7 @@ void insert(node* &root,int val)
         node* temp=root;
         while(true) 
         {
-            cout<<"1.For Left Insert of "<<temp->data<<endl;
+            cout<<"\n1.For Left Insert of "<<temp->data<<endl;
             cout<<"2.For Right Insert of "<<temp->data<<endl;
             int c;
             cout<<"Enter your choice: ";
@@ -55,14 +55,39 @@ void insert(node* &root,int val)
     }
 }
 
-void inorder(node* root) 
+void pre_rec(node* root)
+{
+    if(root!=nullptr)
+    {
+        cout<<root->data<<" ";
+        pre_rec(root->left);
+        pre_rec(root->right);
+    }
+}
+
+void in_rec(node* root) 
 {
     if(root!=nullptr) 
     {
-        inorder(root->left);
+        in_rec(root->left);
         cout<<root->data<<" ";
-        inorder(root->right);
+        in_rec(root->right);
     }
+}
+
+void post_rec(node* root)
+{
+    if(root!=nullptr)
+    {
+        post_rec(root->left);
+        post_rec(root->right);
+        cout<<root->data<<" ";
+    }
+}
+
+void lvlorder(node* root)
+{
+
 }
 
 int main()
@@ -70,18 +95,40 @@ int main()
     node* root=nullptr;
     int n;
 
+    do
+    {
+        cout<<"1.Create Binary Tree";
+        cout<<"2.Preorder Recursive";
+        cout<<"3.Preorder Iterative";
+        cout<<"4.Inorder Recursive";
+        cout<<"5.Inorder Iterative";
+        cout<<"6.Postorder Recursive";
+        cout<<"7.Postorder Iterative";
+        cout<<"8.Level Order";
+        cout<<"9.Clone";
+        cout<<"10.Check Equal Trees";
+        cout<<"11.Mirror Image";
+        cout<<"12.Create BST";
+        cout<<"13.Delete node from BST";
+        cout<<"14.BST from Preorder";
+        cout<<"15.BST from Inorder";
+        cout<<"16.Height";
+
+
+    }
+
     cout<<"Enter the number of nodes to insert: ";
     cin>>n;
 
     for(int i=0;i<n;i++) 
     {
         int val;
-        cout<<"Enter value for node "<<i+1<<": ";
+        cout<<"\nEnter value for node "<<i+1<<": ";
         cin>>val;
         insert(root,val);
     }
 
-    cout<<"Inorder traversal of the tree: ";
-    inorder(root);
+    cout<<"\nInorder traversal of the tree: ";
+    in_rec(root);
     cout<<endl;
 }
