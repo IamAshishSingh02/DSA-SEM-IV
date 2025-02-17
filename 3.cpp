@@ -12,15 +12,15 @@ public:
     node(int d):data(d),left(nullptr),right(nullptr){}
 };
 
-void insert(node* &root,int val)
+void insert(node* &root1,int val)
 {
     node* p=new node(val);
 
-    if(root==nullptr) 
-    root=p;
+    if(root1==nullptr) 
+    root1=p;
     else 
     {
-        node* temp=root;
+        node* temp=root1;
         while(true) 
         {
             cout<<"\n1.For Left Insert of "<<temp->data<<endl;
@@ -50,50 +50,166 @@ void insert(node* &root,int val)
                 temp=temp->right;
             } 
             else
-            cout<<"Invalid choice! Please choose either 1 or 2."<<endl;
+            cout<<"Invalid choice!!!"<<endl;
         }
     }
 }
 
-void pre_rec(node* root)
+void pre_rec(node* root1)
 {
-    if(root!=nullptr)
+    if(root1!=nullptr)
     {
-        cout<<root->data<<" ";
-        pre_rec(root->left);
-        pre_rec(root->right);
+        cout<<root1->data<<" ";
+        pre_rec(root1->left);
+        pre_rec(root1->right);
+    }
+    else
+    cout<<"Binary Tree is Empty\n";
+}
+
+void in_rec(node* root1) 
+{
+    if(root1!=nullptr) 
+    {
+        in_rec(root1->left);
+        cout<<root1->data<<" ";
+        in_rec(root1->right);
+    }
+    else
+    cout<<"Binary Tree is Empty\n";
+}
+
+void post_rec(node* root1)
+{
+    if(root1!=nullptr)
+    {
+        post_rec(root1->left);
+        post_rec(root1->right);
+        cout<<root1->data<<" ";
+    }
+    else
+    cout<<"Binary Tree is Empty\n";
+}
+
+void lvlorder(node* root1)
+{
+    queue<node*> q;
+    if(root1!=nullptr) 
+    {
+        q.push(root1);
+        while(!q.empty()) 
+        {
+            node* t=q.front();
+            q.pop();
+            cout<<t->data<< " ";
+            if(t->left!=nullptr) 
+            q.push(t->left);
+            if(t->right!=nullptr) 
+            q.push(t->right);
+        }
+    }
+    else
+    cout<<"Binary Tree is Empty\n";
+}
+
+node* clone(node* root1) 
+{
+    if(root1==nullptr) 
+    return nullptr;
+    node* t=new node(root1->data);
+    t->left=clone(root1->left);
+    t->right=clone(root1->right);
+    return t;
+}
+
+bool chkeq(node* root1,node* root2)
+{
+    bool a1;
+    bool a2;
+    bool a3;
+    if(root1==nullptr && root2==nullptr)
+    return true;
+    if(root1==nullptr || root2==nullptr)
+    return false;
+    else
+    {
+        a1=root1->data==root2->data;
+        a2=equal(root1->left,root2->left);
+        a3=equal(root1->right,root2->right);
+    }
+    if(a1==true && a2==true && a3==true)
+    return true;
+    else
+    return false;
+}
+
+node* mirror(node* root1) 
+{
+    if(root1==nullptr) 
+    return nullptr;
+    node* t=new node(root1->data);
+    t->left=mirror(root1->right);
+    t->right=mirror(root1->left);
+    return t;
+}
+
+void create_bst(node*& root,int val) 
+{
+    if(root==nullptr) 
+    {
+        root=new node(val);
+        return;
+    }
+    if(val<root->data)
+    {
+        if(root->left==nullptr)
+        {
+            node* t=new node(val);
+            root->left=t;
+            return;
+        }
+        create_bst(root->left,val);
+    }
+    else
+    {
+        if(root->right==nullptr)
+        {
+            node* t1=new node(val);
+            root->right=t1;
+            return;
+        }
+        create_bst(root->right,val);
     }
 }
 
-void in_rec(node* root) 
+int height(node* root) 
 {
-    if(root!=nullptr) 
-    {
-        in_rec(root->left);
-        cout<<root->data<<" ";
-        in_rec(root->right);
-    }
+    if(root==nullptr)
+    return 0;
+    int l=height(root->left);
+    int r=height(root->right);
+    return max(l,r)+1;
 }
 
-void post_rec(node* root)
+bool searchbst(node* root,int val) 
 {
-    if(root!=nullptr)
+    node* t=root;
+    while(t!=nullptr) 
     {
-        post_rec(root->left);
-        post_rec(root->right);
-        cout<<root->data<<" ";
+        if(t->data==val) 
+        return true;
+        else if(t->data>val)
+        t = t->left;
+        else
+        t = t->right;
     }
-}
-
-void lvlorder(node* root)
-{
-
+    return false;
 }
 
 int main()
 {
-    node* root=nullptr;
-    int n;
+    node* root1=nullptr;
+    node* root2=nullptr;
 
     do
     {
@@ -110,25 +226,94 @@ int main()
         cout<<"11.Mirror Image";
         cout<<"12.Create BST";
         cout<<"13.Delete node from BST";
-        cout<<"14.BST from Preorder";
-        cout<<"15.BST from Inorder";
-        cout<<"16.Height";
+        cout<<"14.BST from Preorder & Inorder";
+        cout<<"15.Height";
+        cout<<"16.Search in BST";
+        cout<<"17.Exit"
 
+        int ch;
+        cout<<"Enter your choice: ";
+        cin>>ch;
 
+        switch(ch)
+        {
+            case 1:
+                int n;
+                cout<<"Enter the number of nodes to insert: ";
+                cin>>n;
+                for(int i=0;i<n;i++) 
+                {
+                    int val;
+                    cout<<"\nEnter value for node "<<i+1<<": ";
+                    cin>>val;
+                    insert(root1,val);
+                }
+                cout<<"Binary Tree Created\n";
+            case 2:
+                cout<<"\nPreorder Recursive Traversal: ";
+                pre_rec(root1);
+                cout<<endl;
+            case 3:
+                cout<<"\nPreorder Iterative Traversal: ";
+            case 4:
+                cout<<"\nInorder Recursive Traversal: ";
+                in_rec(root1);
+                cout<<endl;
+            case 5:
+                cout<<"\nInorder Iterative Traversal: ";
+            case 6:
+                cout<<"\nPostorder Recursive Traversal: ";
+                post_rec(root1);
+                cout<<endl;
+            case 7:
+                cout<<"\nPostorder Iterative Traversal: ";
+            case 8:
+                cout<<"\nLevel order Traversal: ";
+                lvlorder(root1);
+                cout<<endl;
+            case 9:
+                cout<<"\nMaking Clone: ";
+                clone(root1);
+                cout<<endl;
+            case 10:
+                cout<<"\nChecking Equal: ";
+                chkeq(root1,root2);
+                cout<<endl;
+            case 11:
+                cout<<"\nCreating a Mirror image";
+                mirror(root1);
+                cout<<endl;
+            case 12:
+                int n;
+                cout<<"Enter the number of nodes to insert: ";
+                cin>>n;
+                for(int i=0;i<n;i++) 
+                {
+                    int val;
+                    cout<<"\nEnter value for node "<<i+1<<": ";
+                    cin>>val;
+                    insert(root2,val);
+                }
+                cout<<"Binary Search Tree Created\n";
+            case 13:
+            case 14:
+            case 15:
+                int h1=height(root1);
+                int h2=height(root2);
+                cout<<"Height of Binary tree is: "<<h1<<endl;
+                cout<<"Height of Binary Search tree is: "<<h2<<endl;
+            case 16:
+                int key;
+                cout<<"Enter the value to be searched: ";
+                cin>>key;
+                if(searchbst(root2,key))
+                cout<<"Element Found";
+                else
+                cout<<"Element absent";
+            default:
+                cout<<"Invalid choice!!!"<<endl;
+        }
     }
-
-    cout<<"Enter the number of nodes to insert: ";
-    cin>>n;
-
-    for(int i=0;i<n;i++) 
-    {
-        int val;
-        cout<<"\nEnter value for node "<<i+1<<": ";
-        cin>>val;
-        insert(root,val);
-    }
-
-    cout<<"\nInorder traversal of the tree: ";
-    in_rec(root);
-    cout<<endl;
+    while(ch!=17)
+    break;
 }
