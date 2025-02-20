@@ -174,6 +174,62 @@ void create_bst(node*& root,int val)
     }
 }
 
+void del(node* &root,int val) 
+{
+    if(root==nullptr)
+    return;
+    if(val<root->data)
+    del(root->left,val);
+    else if(val>root->data)
+    del(root->right,val);
+    else 
+    {
+        if(root->left==nullptr && root->right==nullptr) 
+        {
+            delete root;
+            root=nullptr;
+        } 
+        else if(root->left==nullptr) 
+        {
+            node* temp=root;
+            root=root->right;
+            delete temp;
+        } 
+        else if(root->right==nullptr) 
+        {
+            node* temp=root;
+            root=root->left;
+            delete temp;
+        } 
+        else 
+        {
+            node* temp=root->right;
+            while(temp->left!=nullptr)
+            temp = temp->left;
+            root->data=temp->data;
+            del(root->right,temp->data); 
+        }
+    }
+}
+
+node* constructBSTFromPreorder(vector<int>& preorder, int& index, int minVal, int maxVal) {
+    if (index >= preorder.size()) return nullptr;
+ 
+    int key = preorder[index];
+    if (key < minVal || key > maxVal) return nullptr;
+ 
+    node* root = new node(key);
+    index++;
+    root->left = constructBSTFromPreorder(preorder, index, minVal, key);
+    root->right = constructBSTFromPreorder(preorder, index, key, maxVal);
+    return root;
+}
+
+node* constructBSTFromPreorder(vector<int>& preorder) {
+    int index = 0;
+    return constructBSTFromPreorder(preorder, index, INT_MIN, INT_MAX);
+}
+
 int height(node* root) 
 {
     if(root==nullptr)
@@ -281,41 +337,48 @@ int main()
             break;
 
             case 9:
-            cout<<"\nMaking Clone: ";
-            clone(root1);
-            cout<<endl;
+            root2=clone(root1);
+            cout<<"\nClone Created"<<endl;
             break;
 
             case 10:
-            cout<<"\nChecking Equal: ";
-            chkeq(root1,root2);
-            cout<<endl;
+            cout<<(chkeq(root1,root2)?"\nTrees are Equal":"\nTrees are not Equal")<<endl;
             break;
 
             case 11:
-            cout<<"\nCreating a Mirror image";
-            mirror(root1);
-            cout<<endl;
+            root2=mirror(root1);
+            cout<<"\nMirror image created"<<endl;
             break;
 
             case 12:
             int x;
-            cout<<"Enter the number of nodes to insert: ";
+            cout<<"\nEnter the number of nodes to insert: ";
             cin>>x;
             for(int i=0;i<x;i++) 
             {
                 int val;
                 cout<<"\nEnter value for node "<<i+1<<": ";
                 cin>>val;
-                insert(root2,val);
+                create_bst(root2,val);
             }
             cout<<"Binary Search Tree Created\n";
             break;
 
             case 13:
+            int y;
+            cout<<"Enter value to delete from BST: ";
+            cin>>y;
+            del(root2,y);
             break;
 
             case 14:
+            {int m;
+            cout<<"Enter size of Preorder: ";
+            cin>>m;
+            vector<int> preorderVals(m);
+            for (int i = 0; i < m; i++) cin >> preorderVals[i];
+            root2 = constructBSTFromPreorder(preorderVals);
+            break;}
             break;
 
             case 15:
