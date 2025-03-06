@@ -177,7 +177,7 @@ void create_bst(node*& root,int val)
 void del(node* &root,int val) 
 {
     if(root==nullptr)
-    return;
+    return nullptr;
     if(val<root->data)
     del(root->left,val);
     else if(val>root->data)
@@ -205,29 +205,31 @@ void del(node* &root,int val)
         {
             node* temp=root->right;
             while(temp->left!=nullptr)
-            temp = temp->left;
+            temp=temp->left;
             root->data=temp->data;
             del(root->right,temp->data); 
         }
     }
 }
 
-node* constructBSTFromPreorder(vector<int>& preorder, int& index, int minVal, int maxVal) {
-    if (index >= preorder.size()) return nullptr;
- 
-    int key = preorder[index];
-    if (key < minVal || key > maxVal) return nullptr;
- 
-    node* root = new node(key);
+node* cbst(vector<int>& preorder,int& index,int minVal,int maxVal) 
+{
+    if(index>=preorder.size()) 
+    return nullptr;
+    int key=preorder[index];
+    if(key<minVal || key>maxVal) 
+    return nullptr;
+    node* root=new node(key);
     index++;
-    root->left = constructBSTFromPreorder(preorder, index, minVal, key);
-    root->right = constructBSTFromPreorder(preorder, index, key, maxVal);
+    root->left=cbst(preorder,index,minVal,key);
+    root->right = cbst(preorder,index,key,maxVal);
     return root;
 }
 
-node* constructBSTFromPreorder(vector<int>& preorder) {
-    int index = 0;
-    return constructBSTFromPreorder(preorder, index, INT_MIN, INT_MAX);
+node* cbst(vector<int>& preorder) 
+{
+    int index=0;
+    return cbst(preorder,index,INT_MIN,INT_MAX);
 }
 
 int height(node* root) 
@@ -377,7 +379,7 @@ int main()
             cin>>m;
             vector<int> preorderVals(m);
             for (int i = 0; i < m; i++) cin >> preorderVals[i];
-            root2 = constructBSTFromPreorder(preorderVals);
+            root2 = cbst(preorderVals);
             break;}
             break;
 
